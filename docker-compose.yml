@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  airflow-container:
+    image: apache/airflow:2.3.0-python3.9
+    volumes:
+      - ./dags:/opt/airflow/dags
+    ports:
+      - "8080:8080"
+      #khởi tạo tài khoản đăng nhập vào Airflow
+    command: bash -c '(airflow db init && airflow users create  
+             --username admin
+             --password admin 
+             --firstname damthan 
+             --lastname trang 
+             --role Admin 
+             --email trangdamthan2002@gmail.com);
+             airflow webserver & airflow scheduler'
+    
+  webapp-container:
+    build:
+      context: ./webapp
+      dockerfile: Dockerfile  
+    ports:
+      - 5000:5000
+volumes:
+  dags:
